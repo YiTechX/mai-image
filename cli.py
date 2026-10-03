@@ -36,6 +36,7 @@ def generate_with_progress(
     conversation_id: str = None,
     source_message_id: str = None,
     reference_image: str = None,
+    aspect_ratio: str = None,
     auto_open: bool = False,
 ):
     result = None
@@ -57,6 +58,7 @@ def generate_with_progress(
                 conversation_id=conversation_id,
                 source_message_id=source_message_id,
                 reference_image=reference_image,
+                aspect_ratio=aspect_ratio,
                 on_status=update_status,
             )
     except AuthenticationError as auth_err:
@@ -84,6 +86,7 @@ def main():
     )
     parser.add_argument("prompt", nargs="?", default=None, help="Prompt text.")
     parser.add_argument("-m", "--model", default="mai-image-2-6", help="Model ID (default: mai-image-2-6, or mai-image-2-6-flash).")
+    parser.add_argument("-ar", "--aspect", "--aspect-ratio", default=None, choices=["16:9", "9:16", "4:3", "3:4", "1:1"], help="Aspect ratio (e.g. 16:9, 9:16, 4:3, 3:4, 1:1).")
     parser.add_argument("-i", "--image", default=None, help="Path to reference image (Image-to-Image).")
     parser.add_argument("-o", "--output", default=None, help="Output file path.")
     parser.add_argument("--cid", default=None, help="Conversation ID (for edit/continuation).")
@@ -122,6 +125,7 @@ def main():
             conversation_id=args.cid,
             source_message_id=args.mid,
             reference_image=args.image,
+            aspect_ratio=args.aspect,
             auto_open=args.open,
         )
         return
@@ -161,6 +165,7 @@ def main():
                 conversation_id=current_conv_id,
                 source_message_id=current_msg_id,
                 reference_image=ref_img,
+                aspect_ratio=args.aspect,
                 auto_open=True,
             )
             if res:

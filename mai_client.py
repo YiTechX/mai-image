@@ -329,12 +329,19 @@ class MaiImageClient:
         conversation_id: Optional[str] = None,
         source_message_id: Optional[str] = None,
         reference_image: Optional[str] = None,
+        aspect_ratio: Optional[str] = None,
         on_status: Optional[Callable[[str], None]] = None,
     ) -> Dict[str, str]:
         """
         Executes full generation pipeline (text2img, edit, or image2img with reference).
+        Supports aspect_ratio: '16:9', '9:16', '4:3', '3:4', '1:1'.
         Returns: {"saved_path": str, "conversation_id": str, "message_id": str}
         """
+        if aspect_ratio:
+            ar_str = aspect_ratio.strip()
+            if ar_str not in prompt:
+                prompt = f"{prompt.rstrip()} {ar_str}"
+
         if not self._is_warmed_up:
             self.warmup(on_status=on_status)
 

@@ -160,6 +160,7 @@ MAI_COOKIE="MSCC=cid=...; AppServiceAuthSession=..."
 |------|-------|-------------|---------|
 | `prompt` | - | Image generation prompt string | Interactive Mode |
 | `--model` | `-m` | Model ID (`mai-image-2-6` or `mai-image-2-6-flash`) | `mai-image-2-6` |
+| `--aspect` | `-ar` | Aspect ratio (`16:9`, `9:16`, `4:3`, `3:4`, `1:1`) | `None` |
 | `--image` | `-i` | Path to local reference image (Image-to-Image) | `None` |
 | `--output` | `-o` | Custom output file destination | `outputs/{slug}_{hash}.png` |
 | `--cid` | - | Conversation ID for edit / continuation | `None` |
@@ -200,7 +201,21 @@ python cli.py "an abstract geometric sculpture" -m mai-image-2-6-flash
 
 ---
 
-### 3. Reference Image (Image-to-Image)
+### 3. Aspect Ratio Selection
+
+Choose your preferred aspect ratio (`16:9`, `9:16`, `4:3`, `3:4`, `1:1`) using `-ar` or `--aspect`:
+
+```bash
+# Cinematic widescreen (16:9)
+python cli.py "cinematic drone shot over misty fjords at sunrise" -ar 16:9
+
+# Mobile wallpaper / Portrait (9:16)
+python cli.py "cyberpunk anime girl in rain under neon umbrella" -ar 9:16
+```
+
+---
+
+### 4. Reference Image (Image-to-Image)
 
 Provide a local image to serve as a stylistic or compositional reference:
 
@@ -212,7 +227,7 @@ python cli.py "transform this character into a soft pastel watercolor painting" 
 
 ---
 
-### 4. Multi-Turn Image Editing
+### 5. Multi-Turn Image Editing
 
 To edit an existing image, pass the `--cid` (Conversation ID) and `--mid` (Message ID) returned by a previous generation:
 
@@ -222,7 +237,7 @@ python cli.py "make the car bright red with black racing stripes" --cid 1654f463
 
 ---
 
-### 5. Interactive Terminal Session
+### 6. Interactive Terminal Session
 
 Start an interactive multi-turn session by running `cli.py` without arguments:
 
@@ -239,7 +254,7 @@ Features in Interactive Mode:
 
 ---
 
-### 6. Session Verification Check
+### 7. Session Verification Check
 
 Test if your authentication cookie is still valid without consuming generation quotas:
 
@@ -271,8 +286,11 @@ from mai_client import MaiImageClient
 # Initializes client using MAI_COOKIE from .env
 client = MaiImageClient(model_id="mai-image-2-6")
 
-# Generate image
-result = client.generate("a tranquil Japanese zen garden at dawn, 4k digital art")
+# Generate image (with optional aspect ratio: "16:9", "9:16", "4:3", "3:4", "1:1")
+result = client.generate(
+    prompt="a tranquil Japanese zen garden at dawn, 4k digital art",
+    aspect_ratio="16:9"
+)
 
 print("Saved file:", result["saved_path"])
 print("Conversation ID:", result["conversation_id"])
