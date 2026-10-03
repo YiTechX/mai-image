@@ -1,0 +1,25 @@
+# Environment variables and secrets
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+!.env.example
+
+# Python cache and temporary files
+__pycache__/
+*.py[cod]
+*$py.class
+*.log
+
+# Generated output images and binary assets
+outputs/
+*.png
+*.jpg
+*.jpeg
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
